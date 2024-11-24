@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  /* 버튼 Touch 시 나오는 음영 지우기 */
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+
+  /* test select 안되게 하기 */
+  user-select: none;
+
+  /* link Long touch 막기 */
+  -webkit-touch-callout: none;
+}
