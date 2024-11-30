@@ -3,6 +3,8 @@ import { useRouter } from "next/navigation";
 import useTimer from "./useTimer";
 import { fetchTranscription } from "@/api/transcription";
 import { useDataContext } from "@/contexts/script";
+import useMsgFromRnHandler from "./useMsgFromRnHandler";
+import { hasReactNativeWebview, postMsgToRn } from "@/utils/webView";
 
 type MicStatus = "idle" | "recording" | "paused";
 
@@ -43,7 +45,7 @@ const useRecorder = () => {
     }
   };
 
-  const onStopRecording = (url: string) => {
+  const onStopRecording = (url: string, ext?: string) => {
     setAudioUrl(url);
     stopTimer();
     setMicStatus("idle");
@@ -51,6 +53,11 @@ const useRecorder = () => {
   };
 
   const onPressRecord = () => {
+    if (hasReactNativeWebview) {
+      postMsgToRn({ type: "startRecording" });
+      return;
+    }
+
     window.navigator.mediaDevices
       .getUserMedia({
         audio: true,
@@ -88,11 +95,15 @@ const useRecorder = () => {
          */
         mediaRecorder.start();
         onStartRecording();
-        setMicStatus("recording");
       });
   };
 
   const onPressPause = () => {
+    if (hasReactNativeWebview) {
+      postMsgToRn({ type: "pauseRecording" });
+      return;
+    }
+
     if (
       mediaRecorderRef.current &&
       mediaRecorderRef.current.state === "recording"
@@ -104,6 +115,11 @@ const useRecorder = () => {
   };
 
   const onPressResume = () => {
+    if (hasReactNativeWebview) {
+      postMsgToRn({ type: "resumeRecording" });
+      return;
+    }
+
     if (
       mediaRecorderRef.current &&
       mediaRecorderRef.current.state === "paused"
@@ -115,6 +131,11 @@ const useRecorder = () => {
   };
 
   const onPressSave = () => {
+    if (hasReactNativeWebview) {
+      postMsgToRn({ type: "stopRecording" });
+      return;
+    }
+
     if (
       mediaRecorderRef.current &&
       mediaRecorderRef.current.state !== "inactive"
@@ -144,6 +165,25 @@ const useRecorder = () => {
       }
     }
   };
+
+  useMsgFromRnHandler({
+    onStartRecording,
+    onStopRecording: () => {
+      // onStopRecording(url);
+    },
+    onPause: () => {
+      setMicStatus("paused");
+      stopTimer();
+    },
+    onResume: () => {
+      setMicStatus("recording");
+      startTimer();
+    },
+    onSave: () => {
+      setMicStatus("idle");
+      stopTimer();
+    },
+  });
 
   return {
     micStatus,
