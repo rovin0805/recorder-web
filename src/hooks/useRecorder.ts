@@ -11,12 +11,15 @@ type MicStatus = "idle" | "recording" | "paused";
 const FILE_EXT = "webm";
 
 const useRecorder = () => {
+  const router = useRouter();
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunkRef = useRef<Blob[]>([]);
 
   const [micStatus, setMicStatus] = useState<MicStatus>("idle");
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
+  const { create } = useDataContext();
   const { timeInSec, setTimeInSec, startTimer, stopTimer } = useTimer();
 
   const onStartRecording = () => {
@@ -26,22 +29,25 @@ const useRecorder = () => {
     setMicStatus("recording");
   };
 
-  const { create } = useDataContext();
-  const router = useRouter();
-  const handleScript = async (url: string) => {
-    const res = await fetchTranscription({ url, ext: FILE_EXT });
-    if (res) {
-      const id = `${Date.now()}`;
-      create({
-        id,
-        text: res.transcription.text,
-        scripts: res.transcription.segments.map((segment) => ({
-          start: segment.start,
-          end: segment.end,
-          text: segment.text.trim(),
-        })),
-      });
-      router.push(`/recorder/${id}`);
+  const transcribeAudio = async (url: string, ext: string = FILE_EXT) => {
+    try {
+      const res = await fetchTranscription({ url, ext });
+      if (res) {
+        const id = `${Date.now()}`;
+        create({
+          id,
+          text: res.transcription.text,
+          scripts: res.transcription.segments.map((segment) => ({
+            start: segment.start,
+            end: segment.end,
+            text: segment.text.trim(),
+          })),
+        });
+        router.push(`/recorder/${id}`);
+      }
+    } catch (error) {
+      console.log("🚀 ~ transcribeAudio ~ error:", error);
+      alert("음성 파일 변환에 실패했습니다.");
     }
   };
 
@@ -49,7 +55,7 @@ const useRecorder = () => {
     setAudioUrl(url);
     stopTimer();
     setMicStatus("idle");
-    handleScript(url);
+    transcribeAudio(url, ext);
   };
 
   const onPressRecord = () => {
@@ -168,8 +174,8 @@ const useRecorder = () => {
 
   useMsgFromRnHandler({
     onStartRecording,
-    onStopRecording: () => {
-      // onStopRecording(url);
+    onStopRecording: (url, etx) => {
+      onStopRecording(url, etx);
     },
     onPause: () => {
       setMicStatus("paused");
@@ -178,10 +184,6 @@ const useRecorder = () => {
     onResume: () => {
       setMicStatus("recording");
       startTimer();
-    },
-    onSave: () => {
-      setMicStatus("idle");
-      stopTimer();
     },
   });
 

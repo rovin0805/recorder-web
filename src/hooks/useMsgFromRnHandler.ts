@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { MsgType, hasReactNativeWebview } from "@/utils/webView";
+import { base64ToBlob } from "@/utils/audio";
 
 /**
  * Rn에서 전달받은 메시지를 처리하는 핸들러
@@ -7,10 +8,9 @@ import { MsgType, hasReactNativeWebview } from "@/utils/webView";
 
 interface CallbackProps {
   onStartRecording: () => void;
-  onStopRecording: () => void;
+  onStopRecording: (url: string, ext?: string) => void;
   onPause: () => void;
   onResume: () => void;
-  onSave: () => void;
 }
 
 const useMsgFromRnHandler = (callback: CallbackProps) => {
@@ -18,8 +18,7 @@ const useMsgFromRnHandler = (callback: CallbackProps) => {
     const { type, data } = JSON.parse(event.data);
     console.log("🚀 ~ handlerMsgFromRn :", type, data);
 
-    const { onStartRecording, onStopRecording, onPause, onResume, onSave } =
-      callback;
+    const { onStartRecording, onStopRecording, onPause, onResume } = callback;
 
     switch (type as MsgType) {
       case "startRecording": {
@@ -27,7 +26,17 @@ const useMsgFromRnHandler = (callback: CallbackProps) => {
         break;
       }
       case "stopRecording": {
-        onStopRecording();
+        const { audio, mimeType, ext } = data as {
+          audio: string;
+          mimeType: string;
+          ext: string;
+        };
+
+        // 1. base64 => blob
+        const blob = base64ToBlob(audio, mimeType);
+        const url = URL.createObjectURL(blob);
+
+        onStopRecording(url, ext);
         break;
       }
       case "pauseRecording": {
@@ -36,10 +45,6 @@ const useMsgFromRnHandler = (callback: CallbackProps) => {
       }
       case "resumeRecording": {
         onResume();
-        break;
-      }
-      case "saveRecording": {
-        onSave();
         break;
       }
       default: {

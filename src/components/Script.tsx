@@ -10,7 +10,7 @@ const Script = ({ scripts, onPressSummarize }: ScriptProps) => {
   return (
     <div className="flex flex-col px-[16px] py-[24px]">
       <button
-        className={`relative bg-[${colors.green}] mb-[18px] flex justify-center items-center py-[13px] rounded-[6px] text-[16px] font-[700] text-[#FFFFFF]`}
+        className={`relative bg-[#09CC7F] mb-[18px] flex justify-center items-center py-[13px] rounded-[6px] text-[16px] font-[700] text-[#FFFFFF]`}
         onClick={onPressSummarize}
       >
         요약하기

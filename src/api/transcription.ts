@@ -26,5 +26,7 @@ export const fetchTranscription = async ({
     const data = (await transRes.json()) as ReturnData;
 
     return data;
-  } catch (error) {}
+  } catch (error) {
+    console.log("🚀 ~ fetchTranscription error:", error);
+  }
 };

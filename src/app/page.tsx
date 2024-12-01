@@ -6,7 +6,6 @@ import Button from "@/components/Button";
 export default function Home() {
   const router = useRouter();
   const onClickRecorder = () => {
-    console.log("click recorder @@@");
     router.push("/recorder");
   };
 

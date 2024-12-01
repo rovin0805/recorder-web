@@ -23,7 +23,7 @@ const RecordingDetailPage = () => {
         setData(document);
         return;
       } else {
-        // throw new Error("Cannot load data");
+        console.error("Cannot load data");
       }
     }
   }, [get, id]);
@@ -33,6 +33,7 @@ const RecordingDetailPage = () => {
   }, []);
   const onPressSummaryTab = useCallback(() => {
     setFocusedTab("summary");
+    onPressSummarize();
   }, []);
 
   const [isSummarizing, setIsSummarizing] = useState(false);
@@ -63,6 +64,7 @@ const RecordingDetailPage = () => {
           }
         });
     } catch (error) {
+      console.log("🚀 ~ onPressSummarize ~ error:", error);
     } finally {
       setIsSummarizing(false);
     }
