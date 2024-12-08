@@ -11,6 +11,7 @@ interface CallbackProps {
   onStopRecording: (url: string, ext?: string) => void;
   onPause: () => void;
   onResume: () => void;
+  onTakePhoto: (photos: string[]) => void;
 }
 
 const useMsgFromRnHandler = (callback: CallbackProps) => {
@@ -18,7 +19,13 @@ const useMsgFromRnHandler = (callback: CallbackProps) => {
     const { type, data } = JSON.parse(event.data);
     console.log("🚀 ~ handlerMsgFromRn :", type, data);
 
-    const { onStartRecording, onStopRecording, onPause, onResume } = callback;
+    const {
+      onStartRecording,
+      onStopRecording,
+      onPause,
+      onResume,
+      onTakePhoto,
+    } = callback;
 
     switch (type as MsgType) {
       case "startRecording": {
@@ -45,6 +52,10 @@ const useMsgFromRnHandler = (callback: CallbackProps) => {
       }
       case "resumeRecording": {
         onResume();
+        break;
+      }
+      case "takePhoto": {
+        onTakePhoto([data] as string[]);
         break;
       }
       default: {

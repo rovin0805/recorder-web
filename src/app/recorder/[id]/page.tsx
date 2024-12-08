@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import { Data, useDataContext } from "@/contexts/script";
 import Tab from "@/components/Tab";
 import Script from "@/components/Script";
 import Summary from "@/components/Summary";
+import { hasReactNativeWebview } from "@/utils/webView";
 
 const RecordingDetailPage = () => {
   const params = useParams();
@@ -70,9 +71,28 @@ const RecordingDetailPage = () => {
     }
   };
 
+  const router = useRouter();
+  const onPressImageButton = () => {
+    router.push(`/recorder/${id}/photo`);
+  };
+
   return (
     <div className="h-screen bg-white flex flex-col">
-      <Header title={"음성 기록"} />
+      <Header
+        title={"음성 기록"}
+        renderRight={() => {
+          if (!hasReactNativeWebview) {
+            return <></>;
+          }
+          return (
+            <button className="mr-[16px]" onClick={onPressImageButton}>
+              <span className="material-icons text-[#8E8E93] text-[30px]">
+                image
+              </span>
+            </button>
+          );
+        }}
+      />
 
       <div className="flex">
         <Tab

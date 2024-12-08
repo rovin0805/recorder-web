@@ -6,6 +6,7 @@ import ToastMsg from "@/components/ToastMsg";
 import useRecorder from "@/hooks/useRecorder";
 import useToast from "@/hooks/useToastMsg";
 import { formatTime } from "@/utils/formatStr";
+import { hasReactNativeWebview, postMsgToRn } from "@/utils/webView";
 
 export default function RecorderPage() {
   const {
@@ -47,9 +48,27 @@ export default function RecorderPage() {
     }
   };
 
+  const onPressCamera = () => {
+    postMsgToRn({ type: "openCamera" });
+  };
+
   return (
     <div className="h-screen bg-white flex flex-col">
-      <Header title="녹음하기" />
+      <Header
+        title="녹음하기"
+        renderRight={() => {
+          if (!hasReactNativeWebview) {
+            return <></>;
+          }
+          return (
+            <button className="mr-[16px]" onClick={onPressCamera}>
+              <span className="material-icons text-[#8E8E93] text-[30px]">
+                photo_camera
+              </span>
+            </button>
+          );
+        }}
+      />
 
       <div className="flex flex-1 flex-col justify-center items-center">
         <button

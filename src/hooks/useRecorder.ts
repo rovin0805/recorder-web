@@ -19,6 +19,8 @@ const useRecorder = () => {
   const [micStatus, setMicStatus] = useState<MicStatus>("idle");
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
+  const [photos, setPhotos] = useState<string[]>([]);
+
   const { create } = useDataContext();
   const { timeInSec, setTimeInSec, startTimer, stopTimer } = useTimer();
 
@@ -42,6 +44,7 @@ const useRecorder = () => {
             end: segment.end,
             text: segment.text.trim(),
           })),
+          photos,
         });
         router.push(`/recorder/${id}`);
       }
@@ -184,6 +187,9 @@ const useRecorder = () => {
     onResume: () => {
       setMicStatus("recording");
       startTimer();
+    },
+    onTakePhoto: (photo) => {
+      setPhotos((prev) => prev.concat(photo));
     },
   });
 

@@ -20,6 +20,7 @@ export type Data = {
   text: string;
   scripts: Script[];
   summary?: string;
+  photos?: string[];
 };
 
 type ScriptContextType = {
@@ -53,17 +54,16 @@ export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const update = useCallback(
     ({ id, summary }: { id: string; summary?: string }) => {
-      setDatabase((prev) => {
-        const prevData = prev[id];
-        if (!prevData) {
-          return prev;
+      setDatabase((prevDatabase) => {
+        const prevData = prevDatabase[id];
+        if (prevData == null) {
+          return prevDatabase;
         }
-
         return {
-          ...prev,
+          ...prevDatabase,
           [id]: {
             ...prevData,
-            ...(summary ? { summary } : {}),
+            ...(summary != null ? { summary } : {}),
           },
         };
       });
