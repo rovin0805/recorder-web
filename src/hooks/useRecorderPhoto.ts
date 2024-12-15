@@ -10,7 +10,7 @@ type MicStatus = "idle" | "recording" | "paused";
 
 const FILE_EXT = "webm";
 
-const useRecorder = () => {
+const useRecorderPhoto = () => {
   const router = useRouter();
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -45,6 +45,7 @@ const useRecorder = () => {
             text: segment.text.trim(),
           })),
           photos,
+          createdAt: Date.now(),
         });
         router.push(`/recorder/${id}`);
       }
@@ -204,4 +205,4 @@ const useRecorder = () => {
   };
 };
 
-export default useRecorder;
+export default useRecorderPhoto;

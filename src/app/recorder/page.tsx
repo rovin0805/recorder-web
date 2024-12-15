@@ -3,7 +3,7 @@
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import ToastMsg from "@/components/ToastMsg";
-import useRecorder from "@/hooks/useRecorder";
+import useRecorderPhoto from "@/hooks/useRecorderPhoto";
 import useToast from "@/hooks/useToastMsg";
 import { formatTime } from "@/utils/formatStr";
 import { hasReactNativeWebview, postMsgToRn } from "@/utils/webView";
@@ -17,7 +17,7 @@ export default function RecorderPage() {
     onPressPause,
     onPressResume,
     onPressSave,
-  } = useRecorder();
+  } = useRecorderPhoto();
 
   const { isToastVisible, showToastMsg } = useToast();
 
