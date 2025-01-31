@@ -30,7 +30,7 @@ export default function Home() {
             >
               <div className="mr-[14px]">
                 <div className="w-[28px] h-[28px] rounded-[14px] bg-[#09CC7F] items-center justify-center flex">
-                  <span className="material-icons text-[#FFFFFF] text-[18px]">
+                  <span className="material-icons text-[#FFFFFF] !text-[18px]">
                     mic
                   </span>
                 </div>

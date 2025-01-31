@@ -15,7 +15,7 @@ const Header = ({ title, renderRight }: HeaderProps) => {
     <div className="h-[44px] flex items-center">
       <div className="flex flex-1">
         <button className="ml-[20px]" onClick={onPressBack}>
-          <span className="material-icons text-[#4A4A4A] text-[24px]">
+          <span className="material-icons text-[#4A4A4A] !text-[24px]">
             arrow_back_ios
           </span>
         </button>

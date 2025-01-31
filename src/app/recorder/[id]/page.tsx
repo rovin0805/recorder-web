@@ -86,7 +86,7 @@ const RecordingDetailPage = () => {
           }
           return (
             <button className="mr-[16px]" onClick={onPressImageButton}>
-              <span className="material-icons text-[#8E8E93] text-[30px]">
+              <span className="material-icons text-[#8E8E93] !text-[30px]">
                 image
               </span>
             </button>

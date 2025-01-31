@@ -14,7 +14,7 @@ const Script = ({ scripts, onPressSummarize }: ScriptProps) => {
         onClick={onPressSummarize}
       >
         요약하기
-        <span className="material-icons text-white text-[24px] absolute right-[17px]">
+        <span className="material-icons text-white !text-[24px] absolute right-[17px]">
           east
         </span>
       </button>

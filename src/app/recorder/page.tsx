@@ -25,7 +25,7 @@ export default function RecorderPage() {
     switch (micStatus) {
       case "paused": {
         return (
-          <span className="material-icons text-white text-[70px]">pause</span>
+          <span className="material-icons text-white !text-[70px]">pause</span>
         );
       }
       case "recording":
@@ -34,7 +34,7 @@ export default function RecorderPage() {
           <span
             className={`material-icons ${
               micStatus === "idle" ? "text-white" : "text-green-400"
-            } text-[70px]`}
+            } !text-[70px]`}
           >
             mic
           </span>
@@ -42,7 +42,7 @@ export default function RecorderPage() {
       }
       default: {
         return (
-          <span className="material-icons text-white text-[70px]">report</span>
+          <span className="material-icons text-white !text-[70px]">report</span>
         );
       }
     }
@@ -62,7 +62,7 @@ export default function RecorderPage() {
           }
           return (
             <button className="mr-[16px]" onClick={onPressCamera}>
-              <span className="material-icons text-[#8E8E93] text-[30px]">
+              <span className="material-icons text-[#8E8E93] !text-[30px]">
                 photo_camera
               </span>
             </button>
