@@ -9,8 +9,10 @@ export type MsgType =
   | "saveDatabase";
 
 export const postMsgToRn = ({ type, data }: { type: MsgType; data?: any }) => {
-  window.ReactNativeWebView?.postMessage(JSON.stringify({ type, data }));
+  if (typeof window !== "undefined" && window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(JSON.stringify({ type, data }));
+  }
 };
 
 export const hasReactNativeWebview =
-  window !== undefined && !!window.ReactNativeWebView;
+  typeof window !== "undefined" && !!window.ReactNativeWebView;
